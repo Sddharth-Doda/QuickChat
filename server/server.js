@@ -6,6 +6,8 @@ import { connectDB } from "./lib/db.js";
 import userRouter from "./routes/user.routes.js";
 import messageRouter from "./routes/message.routes.js";
 import { Server } from "socket.io";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 const app = express();
 const server = http.createServer(app);
@@ -15,7 +17,7 @@ app.use(cors({
   origin : process.env.FRONTEND_URL,
   credentials : true,
   methods : ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders : ['content-Type','Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(
@@ -23,7 +25,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized : false,
-    store : Mongostore.create({
+    store : MongoStore.create({
       mongoUrl : process.env.MONGO_URI,
       ttl : 7*24*60*60,
       autoRemove : 'native'
@@ -38,7 +40,7 @@ app.use(
 )
 export const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: process.env.FRONTEND_URL,
   },
 });
 
