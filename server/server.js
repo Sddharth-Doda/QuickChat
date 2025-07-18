@@ -11,8 +11,31 @@ const app = express();
 const server = http.createServer(app);
 
 app.use(express.json({ limit: "7mb" }));
-app.use(cors());
+app.use(cors({
+  origin : process.env.FRONTEND_URL,
+  credentials : true,
+  methods : ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders : ['content-Type','Authorization']
+}));
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized : false,
+    store : Mongostore.create({
+      mongoUrl : process.env.MONGO_URI,
+      ttl : 7*24*60*60,
+      autoRemove : 'native'
+    }),
+    cookie: {
+      maxAge: 7*24*60*60*1000,
+      httpOnly : true,
+      sameSite : 'none',
+      secure : true
+    }
+  })
+)
 export const io = new Server(server, {
   cors: {
     origin: "*",

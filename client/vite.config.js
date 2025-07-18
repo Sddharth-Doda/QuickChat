@@ -6,8 +6,12 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      '/api': 'https://quickchat-backend-n5r2.onrender.com',
+      '/api': {
+        target : 'https://quickchat-backend-n5r2.onrender.com',
+        changeOrigin : true,
+        secure : true
     },
   },
+},
 });
 
