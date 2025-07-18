@@ -16,12 +16,26 @@ const LoginPage = () => {
     const onSubmitHandler = (event) => {
         event.preventDefault();
 
-        if(currState === "Sign Up" && !isDataSubmitted){
-            setIsDataSubmitted(true)
-            return;
-        }
+        // if(currState === "Sign Up" && !isDataSubmitted){
+        //     setIsDataSubmitted(true)
+        //     return;
+        // }
 
-        login(currState === "Sign Up" ? 'signup' : 'login', {fullName,email,password,bio})
+        // login(currState === "Sign Up" ? 'signup' : 'login', {fullName,email,password,bio})
+        if (currState === "Sign Up") {
+            if (!isDataSubmitted) {
+                setIsDataSubmitted(true); // Step 1: show bio input
+                return;
+            }
+
+            // Step 2: submit sign up
+            login('signup', { fullName, email, password, bio });
+        } else {
+            // login flow
+            login('login', { email, password });
+  }
+
+
     }
     return (
         <div className='min-h-screen bg-cover bg-center flex items-center justify-center gap-8 sm:justify-evenly max-sm:flex-col backdrop-blur-2xl'>
@@ -41,7 +55,7 @@ const LoginPage = () => {
                 )}
                 {!isDataSubmitted && (
                     <>
-                    <input onChange={(e)=>setEmail(e.target.value)} value={email} type="email" placeholder='Email Adress' required className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'/>
+                    <input onChange={(e)=>setEmail(e.target.value)} value={email} type="email" placeholder='Email Address' required className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'/>
 
                     <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder='Password' required className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'/>
                     </>
@@ -75,6 +89,6 @@ const LoginPage = () => {
             </form>
         </div>
     )
-}
+};
 
 export default LoginPage
