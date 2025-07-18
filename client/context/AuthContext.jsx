@@ -24,6 +24,20 @@ export const AuthProvider = ({ children }) => {
       toast.error(error.message);
     }
   };
+  useEffect(() => {
+  axios.defaults.baseURL = backendUrl;
+
+  if (token) {
+    axios.defaults.headers.common["token"] = token;
+  }
+
+  const initializeAuth = async () => {
+    await checkAuth();
+  };
+
+  initializeAuth();
+}, [token]);
+
 
   const login = async (state, credentials) => {
     try {
