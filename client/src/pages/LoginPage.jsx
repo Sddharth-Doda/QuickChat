@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react'
 import assets from '../assets/assets'
+import eye from '../assets/eye.png';
+import eyecross from '../assets/eyecross.png';
 import { AuthContext } from '../../context/AuthContext'
 const LoginPage = () => {
 
@@ -10,6 +12,7 @@ const LoginPage = () => {
     const [password, setPassword] = useState("")
     const [bio, setBio] = useState("")
     const [isDataSubmitted, setIsDataSubmitted] = useState(false);
+    const [showPassword, setShowPassword] = useState(false)
 
     const {login} = useContext(AuthContext)
     const isPasswordTooShort = currState === "Sign Up" && !isDataSubmitted && password.length > 0 && password.length < 6;
@@ -48,7 +51,23 @@ const LoginPage = () => {
                     <>
                     <input onChange={(e)=>setEmail(e.target.value)} value={email} type="email" placeholder='Email Address' required className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'/>
 
-                    <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder='Password' required className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'/>
+                    <div className="relative">
+                            <input
+                                onChange={(e) => setPassword(e.target.value)}
+                                value={password}
+                                type={showPassword ? "text" : "password"}
+                                placeholder='Password'
+                                required
+                                className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full pr-10'
+                            />
+                            <span
+                                onClick={() => setShowPassword(!showPassword)}
+                                className='absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 cursor-pointer'
+                            >
+                                {showPassword ? <img className='h-5 w-5' src={eyecross} alt="Hide password" /> : <img className="h-5 w-5" src={eye} alt="Show password" />}
+                            </span>
+                        </div>
+
                     {isPasswordTooShort && (
                         <p className="text-sm text-red-500 -mt-4 mb-2">Password must be at least 6 characters long</p>
                     )}
