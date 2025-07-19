@@ -12,29 +12,20 @@ const LoginPage = () => {
     const [isDataSubmitted, setIsDataSubmitted] = useState(false);
 
     const {login} = useContext(AuthContext)
-
+    const isPasswordTooShort = currState === "Sign Up" && !isDataSubmitted && password.length > 0 && password.length < 6;
     const onSubmitHandler = (event) => {
         event.preventDefault();
-
-        // if(currState === "Sign Up" && !isDataSubmitted){
-        //     setIsDataSubmitted(true)
-        //     return;
-        // }
-
-        // login(currState === "Sign Up" ? 'signup' : 'login', {fullName,email,password,bio})
+        if (isPasswordTooShort) return;
         if (currState === "Sign Up") {
             if (!isDataSubmitted) {
-                setIsDataSubmitted(true); // Step 1: show bio input
+                setIsDataSubmitted(true); t
                 return;
             }
 
-            // Step 2: submit sign up
             login('signup', { fullName, email, password, bio });
         } else {
-            // login flow
             login('login', { email, password });
   }
-
 
     }
     return (
@@ -58,6 +49,9 @@ const LoginPage = () => {
                     <input onChange={(e)=>setEmail(e.target.value)} value={email} type="email" placeholder='Email Address' required className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'/>
 
                     <input onChange={(e)=>setPassword(e.target.value)} value={password} type="password" placeholder='Password' required className='p-2 border border-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500'/>
+                    {isPasswordTooShort && (
+                        <p className="text-sm text-red-500 -mt-4 mb-2">Password must be at least 6 characters long</p>
+                    )}
                     </>
                 )}
 
